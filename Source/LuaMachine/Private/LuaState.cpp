@@ -1397,7 +1397,11 @@ int ULuaState::MetaTableFunction__rawbroadcast(lua_State * L)
 	}
 
 	LuaState->InceptionLevel++;
+#if ENGINE_MAJOR_VERSION < 5 || (ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION < 8)
 	LuaCallContext->MulticastScriptDelegate->ProcessMulticastDelegate<UObject>(Parameters);
+#else
+	LuaCallContext->MulticastScriptDelegate->ProcessDelegate<UObject>(Parameters);
+#endif
 	check(LuaState->InceptionLevel > 0);
 	LuaState->InceptionLevel--;
 
